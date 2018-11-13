@@ -1,0 +1,79 @@
+.field {
+	width: 100%;
+	height: 100%;
+
+	.cards-field {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		.cards {
+			position: relative;
+			height: 80%;
+			width: 80%;
+		}
+
+	}
+
+	.options-field {
+		position: absolute;
+		display: flex;
+		justify-content: space-between;
+		z-index: 1;
+		width: 100%;
+		background-color: #f0f5f5;
+
+		&.closed {
+			padding: 10px;
+			position: absolute;
+			display: flex;
+			z-index: 1;
+			width: 100%;
+			justify-content: center;
+		}
+	}
+
+	.congratulations {
+		top: 0;
+		left: 0;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		&-inner {
+			padding: 200px 400px;
+			background-color: #f9f8fb;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+
+			p {
+				font-size: 80px;
+				margin: 20px;
+
+				&.controls {
+					margin: 20px 0 0;
+					font-size: 30px;
+					text-transform: uppercase;
+					padding: 10px;
+					border-radius: 8px;
+
+					&:hover {
+						background-color: #eeedf0;
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+}

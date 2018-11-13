@@ -1,0 +1,22 @@
+.options {
+  width: 20%;
+  padding: 20px;
+  background-color: #f9f8fb;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 25px;
+}
+.options .option {
+  text-align: center;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.options .option:hover {
+  background-color: #eeedf0;
+}
+.options p {
+  margin: 0;
+  padding: 0;
+}
+/*# sourceMappingURL=style.css.map */
