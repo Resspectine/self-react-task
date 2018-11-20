@@ -10,7 +10,8 @@
   align-items: center;
 }
 .field .cards-field .cards {
-  position: relative;
+  display: flex;
+  flex-wrap: wrap;
   height: 80%;
   width: 80%;
 }

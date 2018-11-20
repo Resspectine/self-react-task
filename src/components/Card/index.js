@@ -1,32 +1,45 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import './style.css';
 
 class Card extends Component {
 
     isRotated = () => {
-        return 'flip-card-inner' + ((this.props.element.isActive) ? ' rotate' : '');
+        return 'flip-card-inner' + ((this.props.card.isActive) ? ' rotate' : '');
     };
 
     render() {
         return (
-            <div className={'flip-card' + ((this.props.element.shouldRemove) ? ' remove ' : ' ') + this.props.color}
-                 onClick={() => this.props.setActive(this.props.element)}
+            <div className={'flip-card ' + this.props.color}
+                 onClick={() => this.props.setActive(this.props.card)}
                  style={{
-                     'left': this.props.element.left * this.props.element.width + '%',
-                     'top': this.props.element.top * this.props.element.height + '%',
-                     'width': this.props.element.width + '%',
-                     'height': this.props.element.height + '%'
+                     'width': this.props.card.width + '%',
+                     'height': this.props.card.height + '%'
                  }}>
-                <div className={this.isRotated()}>
-                    <div className="flip-card-front">
+                {
+                    !this.props.card.removed &&
+                    <div className={this.isRotated()}>
+                        <div className="flip-card-front">
+                        </div>
+                        <div className="flip-card-back">
+                            {this.props.card.number}
+                        </div>
                     </div>
-                    <div className="flip-card-back">
-                        {this.props.element.number}
-                    </div>
-                </div>
+                }
             </div>
         );
     }
 }
+
+Card.propTypes = {
+    card: PropTypes.shape({
+        isActive: PropTypes.bool,
+        width: PropTypes.number,
+        height: PropTypes.number,
+        number: PropTypes.number
+    }),
+    color: PropTypes.string,
+    setActive: PropTypes.func,
+};
 
 export default Card;

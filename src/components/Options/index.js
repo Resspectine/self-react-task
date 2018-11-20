@@ -1,36 +1,36 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import './style.css';
 
 class Options extends Component {
 
-    renderOptions = {
-        'size': this.props.options.map((el, i) => {
+    renderOptions = () => {
+        return this.props.options.map((option, i) => {
             return (
                 <div className="option"
-                     key={el.width + '' + i}
-                     onClick={() => this.props.setOption(el)}>
-                    <p>{'Width: ' + el.width + ', height: ' + el.height}</p>
+                     key={i}
+                     onClick={() => this.props.setOption(option)}>
+                    {this.props.sizeType ?
+                        <p>{'Width: ' + option.width + ', height: ' + option.height}</p> :
+                        <p>{'Color: ' + option}</p>}
                 </div>
             );
-        }),
-        'color': this.props.options.map((el, i) => {
-            return (
-                <div className="option"
-                     key={el+ '' + i}
-                     onClick={() => this.props.setOption(el)}>
-                    <p>{'Color: ' + el}</p>
-                </div>
-            );
-        }),
+        });
     };
 
     render() {
         return (
             <div className="options">
-                {this.renderOptions[this.props.type]}
+                {this.renderOptions()}
             </div>
         );
     }
 }
+
+Options.propTypes = {
+    options: PropTypes.array,
+    sizeType: PropTypes.bool,
+    setOption: PropTypes.func
+};
 
 export default Options;
