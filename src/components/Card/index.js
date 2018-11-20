@@ -10,7 +10,7 @@ class Card extends Component {
 
     render() {
         return (
-            <div className={'flip-card' + ((this.props.card.shouldRemove) ? ' remove ' : ' ') + this.props.color}
+            <div className={'flip-card ' + this.props.color}
                  onClick={() => this.props.setActive(this.props.card)}
                  style={{
                      'width': this.props.card.width + '%',
@@ -34,7 +34,6 @@ class Card extends Component {
 Card.propTypes = {
     card: PropTypes.shape({
         isActive: PropTypes.bool,
-        shouldRemove: PropTypes.bool,
         width: PropTypes.number,
         height: PropTypes.number,
         number: PropTypes.number

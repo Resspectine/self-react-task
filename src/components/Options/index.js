@@ -5,14 +5,14 @@ import './style.css';
 class Options extends Component {
 
     renderOptions = () => {
-        return this.props.options.map((el, i) => {
+        return this.props.options.map((option, i) => {
             return (
                 <div className="option"
-                     key={el + '' + i}
-                     onClick={() => this.props.setOption(el)}>
+                     key={i}
+                     onClick={() => this.props.setOption(option)}>
                     {this.props.sizeType ?
-                        <p>{'Width: ' + el.width + ', height: ' + el.height}</p> :
-                        <p>{'Color: ' + el}</p>}
+                        <p>{'Width: ' + option.width + ', height: ' + option.height}</p> :
+                        <p>{'Color: ' + option}</p>}
                 </div>
             );
         });

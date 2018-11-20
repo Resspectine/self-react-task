@@ -18,20 +18,20 @@ class TimerView extends Component {
         clearInterval(this.interval);
     };
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate() {
         if (this.props.start) {
             this.state.timer.start();
         }
         if (this.props.stop) {
             this.state.timer.stop();
         }
-        if (this.props.hasOwnProperty('isPaused')) {
-            if (this.props.isPaused) {
-                this.state.timer.pause();
-            } else {
-                this.state.timer.resume();
-            }
+        if (this.props.pause) {
+            this.state.timer.pause();
         }
+        if (this.props.resume) {
+            this.state.timer.resume();
+        }
+
     }
 
     renderTime = () => {

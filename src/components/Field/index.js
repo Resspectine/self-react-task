@@ -21,7 +21,12 @@ class Field extends Component {
         ],
         sizeOption: null,
         colorOption: 'red',
-        timerControl: {start: false, stop: false, isPaused: true},
+        timerControl: {
+            start: false,
+            stop: false,
+            pause: true,
+            resume: false
+        },
         activeCard: null,
         preventClick: false,
         isOptionsOpen: true,
@@ -36,69 +41,57 @@ class Field extends Component {
         return a;
     }
 
-    setActive = (element, state) => {
-        let index = this.state.cards.indexOf(element);
-        let temp = this.state.cards.slice();
-        temp[index].isActive = state;
-        return temp;
+    setActive = (card, state) => {
+        let index = this.state.cards.indexOf(card);
+        const cards = this.state.cards.slice();
+        cards[index].isActive = state;
+        return cards;
     };
 
     isComplete = () => {
-        let state = this.state.cards.every(el => {
-            return el.removed;
-        });
-        if (state) {
-            this.setState({timerControl: {isPaused: true}, isComplete: true});
+        const areCardsRemoved = this.state.cards.every(card => card.removed);
+        if (areCardsRemoved) {
+            this.setState({timerControl: {pause: true}, isComplete: true});
         }
     };
 
-    shouldRemoveActive = (element) => {
-        let temp = this.state.cards.slice();
-        let index = this.state.cards.indexOf(element);
-        temp[index].shouldRemove = true;
-        index = this.state.cards.indexOf(this.state.activeCard);
-        temp[index].shouldRemove = true;
-        this.setState({cards: temp, preventClick: true});
-    };
-
     removeActive = () => {
-        let temp = this.state.cards.map((el) => {
-            if (el.shouldRemove) {
-                el.removed = true;
-                el.shouldRemove = false;
+        const cards = this.state.cards.map((card) => {
+            if (card.isActive) {
+                card.removed = true;
+                card.isActive = false;
             }
-            return el;
+            return card;
         });
-        this.setState({cards: temp, preventClick: false});
+        this.setState({cards, preventClick: false});
     };
 
-    rotateCard = (element) => {
-        if (!this.state.preventClick && !this.state.isOptionsOpen) {
+    rotateCard = (card) => {
+        if (!this.state.preventClick && !this.state.isOptionsOpen && !card.removed) {
             if (!this.state.activeCard) {
-                let temp = this.setActive(element, true);
-                this.setState({activeCard: element, cards: temp});
+                const cards = this.setActive(card, true);
+                this.setState({activeCard: card, cards});
             } else {
-                if (this.state.activeCard.id !== element.id) {
-                    let temp = this.setActive(element, true);
-                    this.setState({cards: temp});
-                    if (element.number === this.state.activeCard.number) {
-                        this.shouldRemoveActive(element);
+                if (this.state.activeCard.id !== card.id) {
+                    const cards = this.setActive(card, true);
+                    this.setState({cards});
+                    if (card.number === this.state.activeCard.number) {
+                        this.setState({activeCard: null, preventClick: true});
                         setTimeout(() => {
                             this.removeActive();
-                            this.setState({activeCard: null});
                             this.isComplete();
                         }, 600);
                     } else {
                         setTimeout(() => {
-                            let temp = this.setActive(element, false);
+                            const cards = this.setActive(card, false);
                             let index = this.state.cards.indexOf(this.state.activeCard);
-                            temp[index].isActive = false;
-                            this.setState({activeCard: null, cards: temp});
+                            cards[index].isActive = false;
+                            this.setState({activeCard: null, cards});
                         }, 600);
                     }
                 } else {
-                    let temp = this.setActive(element, false);
-                    this.setState({cards: temp, activeCard: null});
+                    const cards = this.setActive(card, false);
+                    this.setState({cards, activeCard: null});
                 }
             }
         }
@@ -109,21 +102,20 @@ class Field extends Component {
     });
 
     generateArray = ({width, height}) => {
-        let array = [];
-        let cardWidth = 100 / width;
-        let cardHeight = 100 / height;
+        const cards = [];
+        const cardWidth = 100 / width;
+        const cardHeight = 100 / height;
         for (let i = 0; i < width * height / 2; i++) {
-            array.push(i + 1);
+            cards.push(i + 1);
         }
         return this.shuffle([
-            ...this.shuffle(array),
-            ...this.shuffle(array)
+            ...this.shuffle(cards),
+            ...this.shuffle(cards)
         ]).map(el => {
             return {
                 number: el,
                 id: Math.random(),
                 isActive: false,
-                shouldRemove: false,
                 removed: false,
                 width: cardWidth,
                 height: cardHeight
@@ -141,9 +133,9 @@ class Field extends Component {
     };
 
     startGame = (option) => {
-        let cards = this.generateArray(option);
+        const cards = this.generateArray(option);
         this.setState({
-            cards: cards,
+            cards,
             isOptionsOpen: false,
             timerControl: {start: true},
             activeCard: null,
@@ -153,9 +145,11 @@ class Field extends Component {
 
     openOptions = () => {
         if (!this.state.isComplete && this.state.cards.length > 0) {
-            let timer = !this.state.timerControl.isPaused;
+            const isPaused = this.state.timerControl.pause;
+            const timerControl = {};
+            isPaused ? timerControl.resume = true : timerControl.pause = true;
             let option = !this.state.isOptionsOpen;
-            this.setState({isOptionsOpen: option, timerControl: {isPaused: timer}});
+            this.setState({isOptionsOpen: option, timerControl});
         } else {
             this.setState({timerControl: {stop: true}, isOptionsOpen: true});
         }
